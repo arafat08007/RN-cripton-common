@@ -12,7 +12,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs';
 
-import theme from '~/theme';
+import theme, { appColors } from '~/theme';
 import { setShowModal } from '~/redux/attendance';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/redux/store';
@@ -33,7 +33,7 @@ const Card = ({
   return (
     <TouchableOpacity onPress={onPress} style={styles.cardRoot}>
       <Image source={iconSrc} />
-      <Text>{title}</Text>
+      <Text style={styles.menu_text}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -54,62 +54,44 @@ export default ({ navigation }: Props) => {
   // console.log(status);
   return (
     <ScrollView style={styles.root}>
-      <View style={styles.cards}>
+      <View style={styles.cardsContainer}>
         <Card
-          title="APPROVALS"
+          title="Approvals"
           iconSrc={require('~/assets/approval.png')}
           onPress={() => navigation.navigate('Approval')}
         />
         <Card
-          title="MY REQUISITIONS"
+          title="My Requisition"
           iconSrc={require('~/assets/myrequsition.png')}
           onPress={() => navigation.navigate('MyRequests')}
         />
         <Card
-          title="LEAVE REQUISITIONS"
+          title="Leave application"
           iconSrc={require('~/assets/leave.png')}
           onPress={() => navigation.navigate('Leave')}
         />
         <Card
-          title="REQUISITIONS"
+          title="All requisitions"
           iconSrc={require('~/assets/allapproval.png')}
           onPress={() => navigation.navigate('Requisitions')}
         />
       </View>
-      {!(status.OutTime && status.InTime) && (
-        <View style={styles.attendance}>
-          <Text style={styles.attendanceText}>Attendance</Text>
-          <TouchableOpacity
-            onLongPress={() => dispatch(setShowModal(true))}
-            style={styles.roundButton}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>
-              {status.Status === 'Absent' ? 'IN' : 'OUT'}
-            </Text>
-          </TouchableOpacity>
-          <Text style={styles.attendanceText}>
-            Long Press {status.Status === 'Absent' ? 'IN' : 'OUT'}
-          </Text>
-        </View>
-      )}
+    
     </ScrollView>
   );
 };
 
-const cardWidth = width / 2 - 10;
+const cardWidth = width / 2 - 150;
 
 const styles = StyleSheet.create({
   cardRoot: {
     width: cardWidth,
-    height: cardWidth * 0.9,
+    height: cardWidth * 1.3,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
     margin: 5,
-   
- 
-
     borderColor:'rgba(0,0,0,0.2)',
-
     shadowColor: "#306ae5",
     shadowOffset: {
     width: 0,
@@ -117,27 +99,31 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
-
-  
-    padding:10,
-    
+    padding:10,  
     borderRadius: 5,
-
-
   },
   root: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  cards: {
+  cardsContainer: {
     // flexShrink: 1,
     flexWrap: 'wrap',
+    margin:5,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    backgroundColor:'#f2f2f2',
+    minHeight:cardWidth*2.0,
+    alignContent:'center',
+    padding:10,
+    
   },
-
+  menu_text:{
+  textAlign:'center',
+  color:appColors.grey2,
+  fontSize:7,
+  },
   attendance: {
     justifyContent: 'space-evenly',
     alignItems: 'center',

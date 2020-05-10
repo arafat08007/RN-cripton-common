@@ -8,10 +8,10 @@ const headerHeight =
     android: 56,
     default: 44,
   }) + getStatusBarHeight();
-const touchAreaHeight = 25;
+const touchAreaHeight = 50;
 const timeBarHeight = 50;
 
-const topOffset = headerHeight + touchAreaHeight + timeBarHeight;
+const topOffset = headerHeight + 25 ;
 
 const height = windowHeight - topOffset;
 
@@ -21,6 +21,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native-gesture-handler';
+import { appColors } from '~/theme';
 
 export default () => {
   const [showTable, setShowTable] = useState(false);
@@ -57,8 +58,9 @@ export default () => {
       <TouchableWithoutFeedback
         onPress={toggleView}
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: '#f2f2f2',
           height: touchAreaHeight,
+        
         }}>
         <Animated.View
           style={{
@@ -72,7 +74,7 @@ export default () => {
               },
             ],
           }}>
-          <Icon color="blue" name="keyboard-arrow-down" />
+          <Icon color={appColors.primary} name="keyboard-arrow-down" raised={true} size={16}/>
         </Animated.View>
       </TouchableWithoutFeedback>
 

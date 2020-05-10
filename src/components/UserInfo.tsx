@@ -12,14 +12,18 @@ export default () => {
 
         <View style={styles.container}>
             <View style={styles.icon_box}>
-            <Icon             name="person"             
-            color="#fff"                size={16}
+            <Icon           
+            reverse
+                name='user'
+                type='font-awesome'
+                color='#f50'
+                size={16}
             />
         </View>
         <View style={styles.item}>
             <Text style={{fontSize: 12, textAlign: 'left', color:appColors.grey5}}>{user?.Name}</Text>
             <Text style={{fontSize: 8, color: 'tomato'}}>{user?.Designation}</Text>
-            <Text style={{fontSize: 8, color: appColors?.warning}} >{user?.Department}</Text>
+            <Text style={{display:'none'}} >{user?.Department}</Text>
         </View>
 
         <View style={styles.icon_box}>
@@ -43,9 +47,13 @@ const styles = StyleSheet.create({
     },
     item: {
     // width: '30%' // is 50% of container width
+   
     },
     icon_box:{
-        width:'10%',
-      alignItems:'center'
+        width:'20%',
+      alignItems:'center',
+    
+   
+
     }
   });

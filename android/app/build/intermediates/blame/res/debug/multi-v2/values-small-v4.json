@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Works\\reactNative\\Reactnative-cripton\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-small-v4\\values-small-v4.xml",
+            "outputFile": "D:\\works\\reactnative\\RN-cripton-common\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-small-v4\\values-small-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\User\\.gradle\\caches\\transforms-2\\files-2.1\\e5562b5d25b11aa9a2cfdab1dd6a76a7\\res\\values-small-v4\\values-small-v4.xml",
+                    "source": "C:\\Users\\Softbakso Limited\\.gradle\\caches\\transforms-2\\files-2.1\\3dbf93247a12e3501b0b70a0fd5de289\\res\\values-small-v4\\values-small-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

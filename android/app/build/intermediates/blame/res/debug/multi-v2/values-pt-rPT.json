@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Works\\reactNative\\Reactnative-cripton\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pt-rPT\\values-pt-rPT.xml",
+            "outputFile": "D:\\works\\reactnative\\RN-cripton-common\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-pt-rPT\\values-pt-rPT.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\User\\.gradle\\caches\\transforms-2\\files-2.1\\9e7a860092500048dce11762483191ff\\res\\values-pt-rPT\\values.xml",
+                    "source": "C:\\Users\\Softbakso Limited\\.gradle\\caches\\transforms-2\\files-2.1\\138c3486aceb632a716881372d4fccf5\\res\\values-pt-rPT\\values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\User\\.gradle\\caches\\transforms-2\\files-2.1\\f7b36919d93be5cc12441ecd6615aaed\\res\\values-pt-rPT\\values.xml",
+                    "source": "C:\\Users\\Softbakso Limited\\.gradle\\caches\\transforms-2\\files-2.1\\f6178ebc9b7f3ecdb07b02907c777ff7\\res\\values-pt-rPT\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\User\\.gradle\\caches\\transforms-2\\files-2.1\\63d91e7f632f9795c252c6949215531d\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "source": "C:\\Users\\Softbakso Limited\\.gradle\\caches\\transforms-2\\files-2.1\\924f84baedcd8a579122748686607dd6\\res\\values-pt-rPT\\values-pt-rPT.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\User\\.gradle\\caches\\transforms-2\\files-2.1\\a7c2612d5626face08809bf9c239fa95\\res\\values-pt-rPT\\values-pt-rPT.xml",
+                    "source": "C:\\Users\\Softbakso Limited\\.gradle\\caches\\transforms-2\\files-2.1\\e077327f9d06d7382d8ca71e6e2423e5\\res\\values-pt-rPT\\values-pt-rPT.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
