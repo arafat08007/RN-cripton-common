@@ -8,14 +8,18 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Geolocation from 'react-native-geolocation-service';
 
 import theme, { appColors } from '~/theme';
+
 import SSP from '~/screens/SSP';
 import MIS from '~/screens/MIS';
+import PRODUCTION from '~/screens/PRODUCTION';
+import HOME from '~/screens/HOME';
+
 import { RootState } from '~/redux/store';
 import { getStatus, getSummary } from '~/redux/attendance';
 import { getLocations } from '~/redux/approvals';
 import { logout } from '~/redux/auth';
 import { RootStackParamList } from '~/App';
-import Summary from '~/components/Summary';
+
 import AttendancePrompt from '~/components/AttendancePrompt';
 import { setShowModal } from '~/redux/attendance';
 //components
@@ -31,6 +35,8 @@ interface DashboardScreenProps {
 export type TabParamList = {
   SSP: undefined;
   MIS: undefined;
+  PRODUCTION: undefined;
+  HOME: undefined;
 };
 //const Tab = createMaterialTopTabNavigator<TabParamList>();
 const Tab = createBottomTabNavigator();
@@ -107,66 +113,14 @@ export default ({ navigation }: DashboardScreenProps) => {
       />
 
       
-      <View style={styles.attendanceBar}>
-
-        <View style={styles.attendanceBarItem1}>
-        <TouchableOpacity
-            onLongPress={() => dispatch(setShowModal(true))}
-            style={styles.monthlyAttendance}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>
-             14/28
-            </Text>
-          </TouchableOpacity>
-          <Text style={{ color: 'grey', textAlign: 'center', fontSize:9,padding:5, }} > Monthy Attendance</Text>
-
-        </View>
-        <View style={styles.attendanceBarItem2}>
-        <View style={{width:'70%', justifyContent:'flex-end', flexDirection:'column', left:5,}}>
-        <Text style={{fontSize:9, color:appColors.grey2, textAlign:'left', padding:5,}}>Date: {currentDate} </Text>
-        <View style={{flexDirection:'row',}}>
-          <Text style={styles.timeText}>In Time: </Text>
-          <Text style={styles.timeText}>{status.InTime}</Text>
-        </View>
-        <View style={{flexDirection:'row'}}>
-          <Text style={styles.timeText}>Out Time: </Text>
-          <Text style={styles.timeText}>{status.OutTime}</Text>
-        </View>
-        <View style={{flexDirection:'row'}}>
-          <Text style={styles.timeText}>Status:</Text>
-          <Text style={styles.timeText}>{status.Status}</Text>
-        </View>
-        </View>
-        <View style={{width:'30%', justifyContent:'flex-end', right:5,}}>
-        {!(status.OutTime && status.InTime) && (
-        <View style={styles.attendance}>
-         
-         
-          <TouchableOpacity
-            onLongPress={() => dispatch(setShowModal(true))}
-            style={styles.roundButton}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>
-              {status.Status === 'Absent' ? 'IN' : 'OUT'}
-            </Text>
-          </TouchableOpacity>
-       
-        </View>
-      )}
-      </View>
-
-        </View>
-       
-       
-         <Summary />
-      
-
-      </View>
+     
       
       
    
 
 
       <Tab.Navigator
-      initialRouteName="SSP"
+      initialRouteName="HOME"
   
       tabBarOptions={{
     
@@ -176,6 +130,28 @@ export default ({ navigation }: DashboardScreenProps) => {
       }}
 
      >
+
+<Tab.Screen 
+             options={{ title: "Home", tabBarLabel:"Home", 
+             tabBarIcon: ({color}) => (
+               <Icon
+                   name="home"
+                   color={color}
+                   size={16}
+                   reverse={true}
+                   
+               />
+           )
+           }}
+
+
+
+        name="HOME" 
+        component={HOME} 
+        />
+
+
+
         <Tab.Screen 
              options={{ title: "SSP", tabBarLabel:"SSP", 
              tabBarIcon: ({color}) => (
@@ -209,6 +185,26 @@ export default ({ navigation }: DashboardScreenProps) => {
         name="MIS" 
         component={MIS} 
         />
+
+<Tab.Screen 
+             options={{ title: "Production", tabBarLabel:"Production", 
+             tabBarIcon: ({color}) => (
+               <Icon
+                   name="class"
+                   type='material'
+                   color={color}
+                   size={16}
+                   reverse={true}
+                   
+               />
+           )
+           }}
+        name="PRODUCTION" 
+        component={PRODUCTION} 
+        />
+
+
+
       </Tab.Navigator>
 
       <AttendancePrompt />

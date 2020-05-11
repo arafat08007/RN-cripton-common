@@ -11,7 +11,7 @@ const headerHeight =
 const touchAreaHeight = 50;
 const timeBarHeight = 50;
 
-const topOffset = headerHeight + 25 ;
+const topOffset = headerHeight + 40 ;
 
 const height = windowHeight - topOffset;
 
