@@ -13,6 +13,7 @@ import attendance from './attendance';
 import approvals from './approvals';
 import attendanceInfo from './attendanceInfo';
 import leave from './leave';
+import production from './production';
 
 const rootReducer = combineReducers({
   auth,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   approvals,
   attendanceInfo,
   leave,
+  production,
 });
 
 const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(

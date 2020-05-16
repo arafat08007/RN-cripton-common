@@ -1,8 +1,16 @@
-import React, { Component } from 'react';
-import { View, Text,StyleSheet,CheckBox, TouchableOpacity ,Image,Dimensions,TextInput } from 'react-native';
+import React, { Component,useEffect, useCallback } from 'react';
+
+import { View, Text,StyleSheet,CheckBox,ScrollView, TouchableOpacity ,Image,Dimensions,TextInput } from 'react-native';
 
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { appColors } from '~/theme';
+
+//ApI call
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '~/redux/store';
+
+import { getDepartment, getInOut } from '~/redux/production';
+
 
 class PRODUCTION extends Component {
 
@@ -16,12 +24,12 @@ class PRODUCTION extends Component {
         //radioBtnsData: ['Cutting', 'Prinitng', 'Embrodery','Sweing','Ironing','Finising'], 
         
         radioBtnsData: [
-          { name: "Cutting", id: "001" },
-          { name: "Prinitng", id: "002" },
-          { name: "Embrodery", id: "003" },
-          { name: "Sweing", id: "004" },
-          { name: "Ironing", id: "005" },
-          { name: "Finising", id: "006" },
+          { DeptName: "Cutting", Id: "cutting" },
+          { DeptName: "Prinitng", Id: "printing" },
+          { DeptName: "Embrodery", Id: "emb" },
+          { DeptName: "Sweing", Id: "sew" },
+          { DeptName: "Ironing", Id: "iron" },
+          { DeptName: "Finising", Id: "finishing" },
         ],  
         checked: 0,
         depatcheckedid:'',
@@ -111,7 +119,29 @@ class PRODUCTION extends Component {
     //this.setState.goodQnty=text;
   };
 
- 
+   // const user = useSelector((state: RootState) => state.auth.user);
+   // const departments = useSelector((state: RootState) => state.production.proddept);
+   // const deptinout = useSelector((state: RootState) => state.production.inputoutput);
+   // const loading = useSelector((state: RootState) => state.production.loading);
+    users = () => {
+    const user = useSelector((state: RootState) => state.auth.user);
+    return user;
+    }
+
+    departments = () => {
+    const departments = useSelector((state: RootState) => state.production.proddept);
+    return <Text>departments </Text>;
+    }
+    deptinout = () => {
+    const deptinout = useSelector((state: RootState) => state.production.inputoutput);
+    return deptinout;
+    }
+
+    loading = () => {
+    const loading = useSelector((state: RootState) => state.production.loading);
+    return loading;
+    }
+
 
   render() {
 
@@ -157,6 +187,8 @@ class PRODUCTION extends Component {
       borderColor: 'tomato'
     };
     
+  
+ 
 
     return (
         <>
@@ -178,6 +210,7 @@ class PRODUCTION extends Component {
           >
             <View style={styles.bodycontainer}>
               <Text style={styles.sceneHeading}>Select Department</Text>
+              <ScrollView>
 
                 {this.state.radioBtnsData?.map((data, key) => {
                 return (
@@ -185,18 +218,19 @@ class PRODUCTION extends Component {
                 {this.state.checked == key ?
                 <TouchableOpacity style={styles.btn}>
                 <Image style={styles.img} source={require('~/assets/radio_selected.png')}/>
-                <Text>{data.name}</Text>
+                <Text>{data.DeptName}</Text>
                 </TouchableOpacity>
                 :
-                <TouchableOpacity onPress={()=>{this.setState({checked: key, errorflag:'false',depatcheckedid:data.id })}} 
+                <TouchableOpacity onPress={()=>{this.setState({checked: key, errorflag:'false',depatcheckedid:data.Id })}} 
                 style={styles.btn}>
                 <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>
-                <Text>{data.name}</Text>
+                <Text>{data.DeptName}</Text>
                 </TouchableOpacity>
                 }
                 </View>
                 )
                 })}
+              </ScrollView>
 
 
 

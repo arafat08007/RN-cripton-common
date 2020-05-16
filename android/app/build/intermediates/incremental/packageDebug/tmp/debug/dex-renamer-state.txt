@@ -1,4 +1,0 @@
-#Fri May 15 22:31:12 BDT 2020
-base.0=D\:\\works\\reactnative\\RN-cripton-common\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
-path.0=classes.dex
-renamed.0=classes.dex
