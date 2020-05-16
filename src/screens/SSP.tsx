@@ -81,7 +81,7 @@ export default ({ navigation }: Props) => {
   );
 };
 
-const cardWidth = width / 2 - 150;
+const cardWidth = width / 2 - 70;
 
 const styles = StyleSheet.create({
   cardRoot: {
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   menu_text:{
   textAlign:'center',
   color:appColors.grey2,
-  fontSize:7,
+  fontSize:10,
   },
   attendance: {
     justifyContent: 'space-evenly',

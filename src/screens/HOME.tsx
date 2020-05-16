@@ -116,6 +116,9 @@ export default ({ navigation }: Props) => {
 
 </View>
 
+<View style={styles.bodycontainer}>
+
+</View>
       
     
     </>
@@ -144,22 +147,8 @@ const styles = StyleSheet.create({
     padding:10,  
     borderRadius: 5,
   },
-  root: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  cardsContainer: {
-    // flexShrink: 1,
-    flexWrap: 'wrap',
-    margin:5,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    backgroundColor:'#f2f2f2',
-    minHeight:cardWidth*2.0,
-    alignContent:'center',
-    padding:10,
-    
-  },
+
+
   menu_text:{
   textAlign:'center',
   color:appColors.grey2,
@@ -175,13 +164,15 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   attendanceBar:{
+    flex:0,
+ 
     
     flexDirection:'row',
     justifyContent:'space-evenly',
     alignContent:'center',
     padding:5,
-    margin:10,
-    zIndex:99,
+    
+    
   
 
   },
@@ -272,6 +263,16 @@ const styles = StyleSheet.create({
     
   },
   
+  bodycontainer:{
+    flex:2, 
+    padding:5,   
+    justifyContent:'space-evenly',  
+    alignContent:'flex-start',
+    marginTop:7, 
+    marginBottom:7, 
+    backgroundColor:'#FFF', 
+    borderRadius:13,
+},
   
 
 

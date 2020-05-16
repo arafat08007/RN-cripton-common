@@ -26,20 +26,23 @@ class PRODUCTION extends Component {
         checked: 0,
         depatcheckedid:'',
         errorflag:{},
-        lineData : ['Line 1', 'Line 2', 'Line 3'],
+       // lineData : ['Line 1', 'Line 2', 'Line 3'],
+    lineData:[ {name:"Line 1", id:"L001"},{name:"Line 2", id:"L002"},{name:"Line 3", id:"L003"},{name:"Line 14", id:"L014"}],
         linechecked:0,
+        linecheckedid:'',
 
       //  styleData : ['Style 1', 'Style 2', 'Style 3'],
         
         
       styleData : [
  
-      { name: "style 1", color: "RED", type: "Full shirt", buyer:"H&M" },
-      { name: "style 2", color: "WHITE", type: "Full shirt", buyer:"H&M" },
-      { name: "style 3", color: "BLACK", type: "Full shirt", buyer:"H&M" },
+      { name: "style 1", color: "RED", type: "Full shirt", buyer:"H&M" , styleid:'S001'},
+      { name: "style 2", color: "WHITE", type: "Full shirt", buyer:"H&M" ,styleid:'S002'},
+      { name: "style 3", color: "BLACK", type: "Full shirt", buyer:"H&M" ,styleid:'S003'},
     ],
         
         stylechecked:0,
+        stylecheckedid:'',
 
         sizeData:[
           { name: "Large", code: "XL" },
@@ -48,6 +51,7 @@ class PRODUCTION extends Component {
 
         ],
         sizechecked:0,
+        sizecheckedid: '',
 
         altrQnty:0,
         rjctQnty:0,
@@ -156,7 +160,7 @@ class PRODUCTION extends Component {
 
     return (
         <>
-      <View style={{ flex: 1, marginTop: 10, backgroundColor:'#f2f2f2' }}>
+      <View style={{ flex: 1, marginTop: 5, padding:5, backgroundColor:'#f2f2f2' }}>
         <ProgressSteps {...progressStepsStyle}>
           <ProgressStep
             label="Department"
@@ -218,13 +222,13 @@ class PRODUCTION extends Component {
                 {this.state.linechecked == key ?
                 <TouchableOpacity style={styles.btn}>
                 <Image style={styles.img} source={require('~/assets/radio_selected.png')}/>
-                <Text>{data}</Text>
+                <Text>{data.name}</Text>
                 </TouchableOpacity>
                 :
-                <TouchableOpacity onPress={()=>{this.setState({linechecked: key, errorflag:'false' })}} 
+                <TouchableOpacity onPress={()=>{this.setState({linechecked: key, errorflag:'false',linecheckedid:data.id })}} 
                 style={styles.btn}>
                 <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>
-                <Text>{data}</Text>
+                <Text>{data.name}</Text>
                 </TouchableOpacity>
                 }
                 </View>
@@ -264,7 +268,7 @@ class PRODUCTION extends Component {
                 
                 </TouchableOpacity>
                 :
-                <TouchableOpacity onPress={()=>{this.setState({stylechecked: key, errorflag:'false' })}} 
+                <TouchableOpacity onPress={()=>{this.setState({stylechecked: key, errorflag:'false' , stylecheckedid:data.styleid})}} 
                 style={styles.btn}>
                 <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>                
                 <Text  style={{borderRightWidth:1, borderRightColor:'grey', padding:10,}}>Style: {data.name}</Text>
@@ -353,7 +357,7 @@ class PRODUCTION extends Component {
                keyboardType='numeric'
                 placeholder="Good"
                 placeholderTextColor={appColors.green}
-                onChangeText={(value) => this.setState({goodQnty: value, totalQnty:Number(value)+Number(this.state?.rejectQnty)+Number(this.state?.altrQnty) })}
+                onChangeText={(value) => this.setState({goodQnty: value, totalQnty:Number(value || '0')+Number(this.state?.rejectQnty || '0')+Number(this.state?.altrQnty || '0') })}
                 value={this.state.goodQnty}
               />
               </View>
@@ -363,7 +367,7 @@ class PRODUCTION extends Component {
                keyboardType='numeric'
                 placeholder="Alter"
                 placeholderTextColor={appColors.lightBlue}
-                onChangeText={(value) => this.setState({altrQnty: value, totalQnty:Number(value)+Number(this.state?.rejectQnty)+Number(this.state?.goodQnty)})}
+                onChangeText={(value) => this.setState({altrQnty: value, totalQnty:Number(value || '0' )+Number(this.state?.rejectQnty || '0')+Number(this.state?.goodQnty || '0')})}
                 value={this.state.altrQnty}
 
               />
@@ -374,7 +378,7 @@ class PRODUCTION extends Component {
                keyboardType='numeric'
               placeholder="Rejected"
               placeholderTextColor={appColors.red}
-              onChangeText={(value) => this.setState({rejectQnty: value, totalQnty:Number(value)+Number(this.state?.altrQnty)+Number(this.state?.goodQnty) })}
+              onChangeText={(value) => this.setState({rejectQnty: value, totalQnty:Number(value)+Number(this.state?.altrQnty || '0')+Number(this.state?.goodQnty || '0') })}
               value={this.state.rejectQnty}
               
               />

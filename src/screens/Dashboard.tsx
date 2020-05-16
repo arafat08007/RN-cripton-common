@@ -137,8 +137,8 @@ export default ({ navigation }: DashboardScreenProps) => {
                <Icon
                    name="home"
                    color={color}
-                   size={16}
-                   reverse={true}
+                   size={20}
+                   reverse={false}
                    
                />
            )
@@ -158,8 +158,8 @@ export default ({ navigation }: DashboardScreenProps) => {
                <Icon
                    name="work"
                    color={color}
-                   size={16}
-                   reverse={true}
+                   size={20}
+                   reverse={false}
                    
                />
            )
@@ -176,8 +176,8 @@ export default ({ navigation }: DashboardScreenProps) => {
                <Icon
                    name="explore"
                    color={color}
-                   size={16}
-                   reverse={true}
+                   size={20}
+                   reverse={false}
                    
                />
            )
@@ -193,8 +193,8 @@ export default ({ navigation }: DashboardScreenProps) => {
                    name="class"
                    type='material'
                    color={color}
-                   size={16}
-                   reverse={true}
+                   size={20}
+                   reverse={false}
                    
                />
            )

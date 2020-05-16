@@ -134,15 +134,15 @@
     <orderEntry type="library" name="Gradle: com.facebook.fresco:nativeimagetranscoder:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.facebook.fresco:imagepipeline-okhttp3:2.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: org.webkit:android-jsc:r245459@aar" level="project" />
-    <orderEntry type="module" module-name="android-react-native-community_geolocation" />
-    <orderEntry type="module" module-name="android-react-native-community_async-storage" />
-    <orderEntry type="module" module-name="android-react-native-community_datetimepicker" />
-    <orderEntry type="module" module-name="android-react-native-community_masked-view" />
-    <orderEntry type="module" module-name="android-react-native-geolocation-service" />
-    <orderEntry type="module" module-name="android-react-native-gesture-handler" />
-    <orderEntry type="module" module-name="android-react-native-reanimated" />
-    <orderEntry type="module" module-name="android-react-native-safe-area-context" />
-    <orderEntry type="module" module-name="android-react-native-screens" />
-    <orderEntry type="module" module-name="android-react-native-vector-icons" />
+    <orderEntry type="module" module-name="geolocation-android-react-native-community_geolocation" />
+    <orderEntry type="module" module-name="async-storage-android-react-native-community_async-storage" />
+    <orderEntry type="module" module-name="datetimepicker-android-react-native-community_datetimepicker" />
+    <orderEntry type="module" module-name="masked-view-android-react-native-community_masked-view" />
+    <orderEntry type="module" module-name="react-native-geolocation-service-android-react-native-geolocation-service" />
+    <orderEntry type="module" module-name="react-native-gesture-handler-android-react-native-gesture-handler" />
+    <orderEntry type="module" module-name="react-native-reanimated-android-react-native-reanimated" />
+    <orderEntry type="module" module-name="react-native-safe-area-context-android-react-native-safe-area-context" />
+    <orderEntry type="module" module-name="react-native-screens-android-react-native-screens" />
+    <orderEntry type="module" module-name="react-native-vector-icons-android-react-native-vector-icons" />
   </component>
 </module>
