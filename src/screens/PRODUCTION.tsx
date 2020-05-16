@@ -1,7 +1,7 @@
 import React, { Component,useEffect, useCallback } from 'react';
 
 import { View, Text,StyleSheet,CheckBox,ScrollView, TouchableOpacity ,Image,Dimensions,TextInput } from 'react-native';
-
+import { Icon, Button, Input } from 'react-native-elements';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { appColors } from '~/theme';
 
@@ -30,12 +30,18 @@ class PRODUCTION extends Component {
           { DeptName: "Sweing", Id: "sew" },
           { DeptName: "Ironing", Id: "iron" },
           { DeptName: "Finising", Id: "finishing" },
+          
         ],  
         checked: 0,
         depatcheckedid:'',
         errorflag:{},
        // lineData : ['Line 1', 'Line 2', 'Line 3'],
-    lineData:[ {name:"Line 1", id:"L001"},{name:"Line 2", id:"L002"},{name:"Line 3", id:"L003"},{name:"Line 14", id:"L014"}],
+    lineData:[ 
+      {DeptName:"Input", id:"L001"},
+      {DeptName:"Output", id:"L002"},
+      {DeptName:"QA", id:"L003"},
+      {DeptName:"Delivery", id:"L004"}
+    ],
         linechecked:0,
         linecheckedid:'',
 
@@ -52,12 +58,63 @@ class PRODUCTION extends Component {
         stylechecked:0,
         stylecheckedid:'',
 
-        sizeData:[
-          { name: "Large", code: "XL" },
-          { name: "Small", code: "S" },
-          { name: "Medium", code: "M" },
-
-        ],
+        sizeData:[{
+         Id: " ",
+          BuyerName: " ",
+           StyleName: " ",
+          ColorName: " ",
+          Qty: "26",
+          PrdQty: "0",
+          SizeName: "XXS"
+        }, {
+         Id: " ",
+          BuyerName: " ",
+           StyleName: " ",
+          ColorName: " ",
+          Qty: "165",
+          PrdQty: "0",
+          SizeName: "XS"
+        }, {
+         Id: " ",
+          BuyerName: " ",
+           StyleName: " ",
+          ColorName: " ",
+          Qty: "279",
+          PrdQty: "0",
+          SizeName: "S"
+        }, {
+         Id: " ",
+          BuyerName: " ",
+           StyleName: " ",
+          ColorName: " ",
+          Qty: "294",
+          PrdQty: "0",
+          SizeName: "M"
+        }, {
+         Id: " ",
+          BuyerName: " ",
+           StyleName: " ",
+          ColorName: " ",
+          Qty: "227",
+          PrdQty: "0",
+          SizeName: "L"
+        }, {
+         Id: " ",
+          BuyerName: " ",
+           StyleName: " ",
+          ColorName: " ",
+          Qty: "160",
+          PrdQty: "0",
+          SizeName: "XL"
+        }, {
+         Id: " ",
+          BuyerName: " ",
+           StyleName: " ",
+          ColorName: " ",
+          Qty: "62",
+          PrdQty: "0",
+          SizeName: "XXL"
+        }],
         sizechecked:0,
         sizecheckedid: '',
 
@@ -66,6 +123,10 @@ class PRODUCTION extends Component {
         goodQnty:0,
         totalQnty: 0,
 
+        jobnumber:'',
+        productionqnty:0,
+        todayqnty:0,
+
 
 
 
@@ -73,7 +134,7 @@ class PRODUCTION extends Component {
 }
 
   static navigationOptions = {
-    header: null
+    header: " "
   };
 
   defaultScrollViewProps = {
@@ -210,6 +271,7 @@ class PRODUCTION extends Component {
           >
             <View style={styles.bodycontainer}>
               <Text style={styles.sceneHeading}>Select Department</Text>
+
               <ScrollView>
 
                 {this.state.radioBtnsData?.map((data, key) => {
@@ -238,7 +300,7 @@ class PRODUCTION extends Component {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Line"
+            label="Options"
             onNext={this.onNextStep}
             onPrevious={this.onPrevStep}
             scrollViewProps={this.defaultScrollViewProps}
@@ -248,7 +310,7 @@ class PRODUCTION extends Component {
             nextBtnStyle={buttonstyle}
           >
             <View style={styles.bodycontainer}>
-            <Text style={styles.sceneHeading}>Select Line</Text>
+            <Text style={styles.sceneHeading}>Select option</Text>
 
             {this.state.lineData?.map((data, key) => {
                 return (
@@ -256,13 +318,13 @@ class PRODUCTION extends Component {
                 {this.state.linechecked == key ?
                 <TouchableOpacity style={styles.btn}>
                 <Image style={styles.img} source={require('~/assets/radio_selected.png')}/>
-                <Text>{data.name}</Text>
+                <Text>{data.DeptName}</Text>
                 </TouchableOpacity>
                 :
                 <TouchableOpacity onPress={()=>{this.setState({linechecked: key, errorflag:'false',linecheckedid:data.id })}} 
                 style={styles.btn}>
                 <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>
-                <Text>{data.name}</Text>
+                <Text>{data.DeptName}</Text>
                 </TouchableOpacity>
                 }
                 </View>
@@ -285,6 +347,32 @@ class PRODUCTION extends Component {
           >
            <View style={styles.bodycontainer}>
            <Text style={styles.sceneHeading}>Choose style</Text>
+
+              <View style={styles.jobnumberarea}>
+                    <Text style={{textAlign:'auto', fontSize:12, color:'tomato',}}>Input job number:</Text>
+                    <TextInput style={styles.inputtext}
+                    keyboardType='numeric'
+                    placeholder="Job number"
+                    placeholderTextColor={appColors.grey5}
+                    onChangeText={(value) => this.setState({jobnumber: value,})}
+                    value={this.state.jobnumber}
+
+                    />
+                    <Button
+                    raised
+                    title="Search"
+                    type="outline"
+                    icon={<Icon name="search" />}
+                    onPress={() => {
+
+
+                    }}
+                    />
+
+              </View>
+
+
+              <ScrollView>
 
            {this.state.styleData?.map((data, key) => {
                 return (
@@ -314,9 +402,12 @@ class PRODUCTION extends Component {
                
                 </TouchableOpacity>
                 }
+
                 </View>
                 )
                 })}
+
+        </ScrollView>
 
 
 
@@ -324,56 +415,7 @@ class PRODUCTION extends Component {
             </View>
           </ProgressStep>
           <ProgressStep
-            label="Size"
-            onNext={this.onNextStep}
-            onPrevious={this.onPrevStep}
-            scrollViewProps={this.defaultScrollViewProps}
-            nextBtnTextStyle={nextbtntextstyle}
-            nextBtnStyle={buttonstyle}
-            previousBtnTextStyle ={prevbtntextstyle}
-          >
-           <View style={styles.bodycontainer}>
-           <Text style={styles.sceneHeading}>Choose Size </Text>
-
-
-           {this.state.sizeData?.map((data, key) => {
-                return (
-                <View key={key}   >
-                {this.state.sizechecked == key ?
-                <TouchableOpacity style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_selected.png')}/>
-                <Text  style={{borderRightWidth:1, borderRightColor:'grey', padding:10,}}> {data.code}</Text>
-                <View style={{flexDirection:'column', justifyContent:'space-around',padding:5, marginLeft:5,}}>
-                <Text style={styles.subtext}> {data.name}</Text>
-                
-                </View>
-
-                
-                </TouchableOpacity>
-                :
-                <TouchableOpacity onPress={()=>{this.setState({sizechecked: key, errorflag:'false' })}} 
-                style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>                
-                <Text  style={{borderRightWidth:1, borderRightColor:'grey', padding:10,}}> {data.code}</Text>
-                <View style={{flexDirection:'column', justifyContent:'space-evenly',padding:5, marginLeft:5, }}>
-                <Text style={styles.subtext}> {data.name}</Text>
-                
-                </View>
-               
-                </TouchableOpacity>
-                }
-                </View>
-                )
-                })}
-
-
-
-
-            </View>
-          </ProgressStep>
-
-          <ProgressStep
-            label="Quantity"
+            label="Finish"
             onPrevious={this.onPrevStep}
             onSubmit={this.onSubmitSteps}
             scrollViewProps={this.defaultScrollViewProps}
@@ -382,56 +424,46 @@ class PRODUCTION extends Component {
             previousBtnTextStyle ={prevbtntextstyle}
           >
            <View style={styles.bodycontainer}>
-           <Text style={styles.sceneHeading}>Input Quantity</Text>
+           <Text style={styles.sceneHeading}>Input today's quantity </Text>
 
-           <View style={styles.quntitycontainer}>
-              <View style={styles.qntyItem}> 
-              <Text style={{textAlign:'center', fontSize:9, color:appColors.green,}}>Good</Text>
-              <TextInput style={styles.inputtext}
-               keyboardType='numeric'
-                placeholder="Good"
-                placeholderTextColor={appColors.green}
-                onChangeText={(value) => this.setState({goodQnty: value, totalQnty:Number(value || '0')+Number(this.state?.rejectQnty || '0')+Number(this.state?.altrQnty || '0') })}
-                value={this.state.goodQnty}
-              />
-              </View>
-              <View style={styles.qntyItem}>
-              <Text style={{textAlign:'center', fontSize:9, color:appColors.lightBlue,}}>Alter</Text>
-              <TextInput style={styles.inputtext}
-               keyboardType='numeric'
-                placeholder="Alter"
-                placeholderTextColor={appColors.lightBlue}
-                onChangeText={(value) => this.setState({altrQnty: value, totalQnty:Number(value || '0' )+Number(this.state?.rejectQnty || '0')+Number(this.state?.goodQnty || '0')})}
-                value={this.state.altrQnty}
+           <View style={{flexDirection:'row', justifyContent:'space-around',padding:3, margin:5, borderBottomColor:appColors.grey4, borderBottomWidth:1,}}>
+              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}}>Size</Text>
+              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}} >Quantity</Text>
+              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}}>Production</Text>
+              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}}>Today</Text>
+          </View>
 
-              />
+           {this.state.sizeData?.map((data, key) => {
+                return (
+                <View key={key}  >
+                  <ScrollView>
+
+                   <View style={{flexDirection:'row', justifyContent:'space-around',padding:5, borderBottomColor:appColors.grey4, borderBottomWidth:1,}}>
+                <Text style={styles.subtext}> {data.SizeName}</Text>
+                <Text style={styles.subtext}> {data.Qty}</Text>
+                <Text style={styles.subtext}> {data.PrdQty}</Text>
+                  <TextInput style={styles.qntyinput}
+                  keyboardType='numeric'
+                  placeholder="Qnty"
+                  placeholderTextColor={appColors.grey5}
+                  onChangeText={(value) => this.setState({todayqnty: value,})}
+                  value={this.state.todayqnty}
+
+                  />
+                
                 </View>
-              <View style={styles.qntyItem}>
-                <Text style={{textAlign:'center', fontSize:9, color:appColors.red,}}>Rejected</Text>
-              <TextInput style={styles.inputtext}
-               keyboardType='numeric'
-              placeholder="Rejected"
-              placeholderTextColor={appColors.red}
-              onChangeText={(value) => this.setState({rejectQnty: value, totalQnty:Number(value)+Number(this.state?.altrQnty || '0')+Number(this.state?.goodQnty || '0') })}
-              value={this.state.rejectQnty}
-              
-              />
+                </ScrollView>
                 </View>
-
-
-                <View style={styles.qntyItem}>
-                <Text style={{textAlign:'center', fontSize:9, color:appColors.grey1,}}>Total</Text>
-              <Text style={styles.inputtext}>{this.state.totalQnty}</Text>
-                </View>
-
-           </View>
-
+                )
+                })}
 
 
 
 
             </View>
           </ProgressStep>
+
+         
         </ProgressSteps>
       </View>
       </>
@@ -442,12 +474,12 @@ class PRODUCTION extends Component {
 //const cardWidth = width / 2 - 150;
 const styles = StyleSheet.create({ 
 bodycontainer:{
-    flex:2, 
-    padding:5,   
+    flex:1, 
+      
     justifyContent:'space-evenly',  
     alignContent:'flex-start',
-    marginTop:7, 
-    marginBottom:7, 
+    marginTop:5, 
+    marginBottom:5, 
     backgroundColor:'#FFF', 
     borderRadius:13,
 },
@@ -455,7 +487,22 @@ inputtext:{
   padding:3,
   textAlign:'center',
   color:appColors.grey1,
+  borderColor:appColors.grey3,
+  borderWidth:1,
+  minWidth:200,
+  borderRadius:9,
 },
+qntyinput:{
+  padding:3,
+  minWidth:'30%',
+  textAlign:'center',
+  color:appColors.grey1,
+  borderColor:appColors.grey3,
+  borderWidth:1,
+  borderRadius:9,
+
+}
+,
 sceneHeading:{
   textAlign:'center',
   alignContent:'stretch',
@@ -498,9 +545,10 @@ btn:{
   borderColor:appColors.lightBlue,
 },
 subtext:{
-  fontSize:9,
-  color:appColors.grey2,
-  fontWeight:'100'
+  fontSize:10,
+  color:appColors.primary,
+  fontWeight:'100',
+  textAlign:'left'
 },
 
 quntitycontainer:{
@@ -525,6 +573,18 @@ qntyItem:{
   borderEndWidth:1,
   borderStartColor:appColors.grey3,
   borderStartWidth:1,
+
+},
+jobnumberarea:{
+ flexDirection:'row',
+  justifyContent:'space-evenly',
+  alignItems:'center',
+ 
+ paddingTop:10,
+ paddingBottom:10,
+backgroundColor:'#f2f2f2',
+
+
 
 }
 
