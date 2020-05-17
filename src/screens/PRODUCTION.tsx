@@ -229,6 +229,11 @@ class PRODUCTION extends Component<any, any> {
     return loading;
   };
 
+  componentDidMount() {
+    this.props.dispatch(getDepartment());
+    this.props.dispatch(getInOut());
+  }
+
   render() {
     console.log(this.props.user);
     console.log(this.props.production);
