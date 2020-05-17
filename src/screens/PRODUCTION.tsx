@@ -1,156 +1,179 @@
-import React, { Component,useEffect, useCallback } from 'react';
+import React, { Component, useEffect, useCallback } from 'react';
 
-import { View, Text,StyleSheet,CheckBox,ScrollView, TouchableOpacity ,Image,Dimensions,TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  CheckBox,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  TextInput,
+} from 'react-native';
 import { Icon, Button, Input } from 'react-native-elements';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { appColors } from '~/theme';
 
 //ApI call
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, connect } from 'react-redux';
 import { RootState } from '~/redux/store';
 
 import { getDepartment, getInOut } from '~/redux/production';
+import { State } from 'react-native-gesture-handler';
 
-
-class PRODUCTION extends Component {
-
-  constructor(props) {
+class PRODUCTION extends Component<any, any> {
+  constructor(props: any) {
     super(props);
     this.state = {
+      backgroundColorstyle: '#F2F2F2',
 
-      backgroundColorstyle:'#F2F2F2',
+      //radioBtnsData: ['Cutting', 'Prinitng', 'Embrodery','Sweing','Ironing','Finising'],
 
-
-        //radioBtnsData: ['Cutting', 'Prinitng', 'Embrodery','Sweing','Ironing','Finising'], 
-        
-        radioBtnsData: [
-          { DeptName: "Cutting", Id: "cutting" },
-          { DeptName: "Prinitng", Id: "printing" },
-          { DeptName: "Embrodery", Id: "emb" },
-          { DeptName: "Sweing", Id: "sew" },
-          { DeptName: "Ironing", Id: "iron" },
-          { DeptName: "Finising", Id: "finishing" },
-          
-        ],  
-        checked: 0,
-        depatcheckedid:'',
-        errorflag:{},
-       // lineData : ['Line 1', 'Line 2', 'Line 3'],
-    lineData:[ 
-      {DeptName:"Input", id:"L001"},
-      {DeptName:"Output", id:"L002"},
-      {DeptName:"QA", id:"L003"},
-      {DeptName:"Delivery", id:"L004"}
-    ],
-        linechecked:0,
-        linecheckedid:'',
+      radioBtnsData: [
+        { DeptName: 'Cutting', Id: 'cutting' },
+        { DeptName: 'Prinitng', Id: 'printing' },
+        { DeptName: 'Embrodery', Id: 'emb' },
+        { DeptName: 'Sweing', Id: 'sew' },
+        { DeptName: 'Ironing', Id: 'iron' },
+        { DeptName: 'Finising', Id: 'finishing' },
+      ],
+      checked: 0,
+      depatcheckedid: '',
+      errorflag: {},
+      // lineData : ['Line 1', 'Line 2', 'Line 3'],
+      lineData: [
+        { DeptName: 'Input', id: 'L001' },
+        { DeptName: 'Output', id: 'L002' },
+        { DeptName: 'QA', id: 'L003' },
+        { DeptName: 'Delivery', id: 'L004' },
+      ],
+      linechecked: 0,
+      linecheckedid: '',
 
       //  styleData : ['Style 1', 'Style 2', 'Style 3'],
-        
-        
-      styleData : [
- 
-      { name: "style 1", color: "RED", type: "Full shirt", buyer:"H&M" , styleid:'S001'},
-      { name: "style 2", color: "WHITE", type: "Full shirt", buyer:"H&M" ,styleid:'S002'},
-      { name: "style 3", color: "BLACK", type: "Full shirt", buyer:"H&M" ,styleid:'S003'},
-    ],
-        
-        stylechecked:0,
-        stylecheckedid:'',
 
-        sizeData:[{
-         Id: " ",
-          BuyerName: " ",
-           StyleName: " ",
-          ColorName: " ",
-          Qty: "26",
-          PrdQty: "0",
-          SizeName: "XXS"
-        }, {
-         Id: " ",
-          BuyerName: " ",
-           StyleName: " ",
-          ColorName: " ",
-          Qty: "165",
-          PrdQty: "0",
-          SizeName: "XS"
-        }, {
-         Id: " ",
-          BuyerName: " ",
-           StyleName: " ",
-          ColorName: " ",
-          Qty: "279",
-          PrdQty: "0",
-          SizeName: "S"
-        }, {
-         Id: " ",
-          BuyerName: " ",
-           StyleName: " ",
-          ColorName: " ",
-          Qty: "294",
-          PrdQty: "0",
-          SizeName: "M"
-        }, {
-         Id: " ",
-          BuyerName: " ",
-           StyleName: " ",
-          ColorName: " ",
-          Qty: "227",
-          PrdQty: "0",
-          SizeName: "L"
-        }, {
-         Id: " ",
-          BuyerName: " ",
-           StyleName: " ",
-          ColorName: " ",
-          Qty: "160",
-          PrdQty: "0",
-          SizeName: "XL"
-        }, {
-         Id: " ",
-          BuyerName: " ",
-           StyleName: " ",
-          ColorName: " ",
-          Qty: "62",
-          PrdQty: "0",
-          SizeName: "XXL"
-        }],
-        sizechecked:0,
-        sizecheckedid: '',
+      styleData: [
+        {
+          name: 'style 1',
+          color: 'RED',
+          type: 'Full shirt',
+          buyer: 'H&M',
+          styleid: 'S001',
+        },
+        {
+          name: 'style 2',
+          color: 'WHITE',
+          type: 'Full shirt',
+          buyer: 'H&M',
+          styleid: 'S002',
+        },
+        {
+          name: 'style 3',
+          color: 'BLACK',
+          type: 'Full shirt',
+          buyer: 'H&M',
+          styleid: 'S003',
+        },
+      ],
 
-        altrQnty:0,
-        rjctQnty:0,
-        goodQnty:0,
-        totalQnty: 0,
+      stylechecked: 0,
+      stylecheckedid: '',
 
-        jobnumber:'',
-        productionqnty:0,
-        todayqnty:0,
+      sizeData: [
+        {
+          Id: ' ',
+          BuyerName: ' ',
+          StyleName: ' ',
+          ColorName: ' ',
+          Qty: '26',
+          PrdQty: '0',
+          SizeName: 'XXS',
+        },
+        {
+          Id: ' ',
+          BuyerName: ' ',
+          StyleName: ' ',
+          ColorName: ' ',
+          Qty: '165',
+          PrdQty: '0',
+          SizeName: 'XS',
+        },
+        {
+          Id: ' ',
+          BuyerName: ' ',
+          StyleName: ' ',
+          ColorName: ' ',
+          Qty: '279',
+          PrdQty: '0',
+          SizeName: 'S',
+        },
+        {
+          Id: ' ',
+          BuyerName: ' ',
+          StyleName: ' ',
+          ColorName: ' ',
+          Qty: '294',
+          PrdQty: '0',
+          SizeName: 'M',
+        },
+        {
+          Id: ' ',
+          BuyerName: ' ',
+          StyleName: ' ',
+          ColorName: ' ',
+          Qty: '227',
+          PrdQty: '0',
+          SizeName: 'L',
+        },
+        {
+          Id: ' ',
+          BuyerName: ' ',
+          StyleName: ' ',
+          ColorName: ' ',
+          Qty: '160',
+          PrdQty: '0',
+          SizeName: 'XL',
+        },
+        {
+          Id: ' ',
+          BuyerName: ' ',
+          StyleName: ' ',
+          ColorName: ' ',
+          Qty: '62',
+          PrdQty: '0',
+          SizeName: 'XXL',
+        },
+      ],
+      sizechecked: 0,
+      sizecheckedid: '',
 
+      altrQnty: 0,
+      rjctQnty: 0,
+      goodQnty: 0,
+      totalQnty: 0,
 
-
-
-    }
-}
+      jobnumber: '',
+      productionqnty: 0,
+      todayqnty: 0,
+    };
+  }
 
   static navigationOptions = {
-    header: " "
+    header: ' ',
   };
 
   defaultScrollViewProps = {
     keyboardShouldPersistTaps: 'handled',
     contentContainerStyle: {
       flex: 1,
-      justifyContent: 'center'
-    }
+      justifyContent: 'center',
+    },
   };
 
   onNextStep = () => {
     console.log('called next step');
-   // console.log(""+{errorflag});
-    
-
-    
+    // console.log(""+{errorflag});
   };
 
   onPaymentStepComplete = () => {
@@ -166,47 +189,50 @@ class PRODUCTION extends Component {
     var totalQnty = this.state.totalQnty;
     var goodQnty = Number(this.state?.goodQnty);
     var altrQnty = Number(this.state.altrQnty);
-    var rejectQnty =  Number(this.state.rejectQnty);
+    var rejectQnty = Number(this.state.rejectQnty);
 
     var checkedDept = this.state.depatcheckedid;
 
-    console.info ('Total: '+Number(totalQnty)+''+checkedDept)
-
-
+    console.info('Total: ' + Number(totalQnty) + '' + checkedDept);
   };
 
-  onQntyInput = (text:any) => {
-    console.log('Quantity inputed.' +{text});
+  onQntyInput = (text: any) => {
+    console.log('Quantity inputed.' + { text });
     //this.setState.goodQnty=text;
   };
 
-   // const user = useSelector((state: RootState) => state.auth.user);
-   // const departments = useSelector((state: RootState) => state.production.proddept);
-   // const deptinout = useSelector((state: RootState) => state.production.inputoutput);
-   // const loading = useSelector((state: RootState) => state.production.loading);
-    users = () => {
+  user = this.props.user;
+  production = this.props.production;
+  // const departments = useSelector((state: RootState) => state.production.proddept);
+  // const deptinout = useSelector((state: RootState) => state.production.inputoutput);
+  // const loading = useSelector((state: RootState) => state.production.loading);
+  users = () => {
     const user = useSelector((state: RootState) => state.auth.user);
     return user;
-    }
+  };
 
-    departments = () => {
-    const departments = useSelector((state: RootState) => state.production.proddept);
+  departments = () => {
+    const departments = useSelector(
+      (state: RootState) => state.production.proddept
+    );
     return <Text>departments </Text>;
-    }
-    deptinout = () => {
-    const deptinout = useSelector((state: RootState) => state.production.inputoutput);
+  };
+  deptinout = () => {
+    const deptinout = useSelector(
+      (state: RootState) => state.production.inputoutput
+    );
     return deptinout;
-    }
+  };
 
-    loading = () => {
+  loading = () => {
     const loading = useSelector((state: RootState) => state.production.loading);
     return loading;
-    }
-
+  };
 
   render() {
-
-  
+    console.log(this.props.user);
+    console.log(this.props.production);
+    console.log(this.props.dispatch);
     const progressStepsStyle = {
       activeStepIconBorderColor: 'tomato',
       activeLabelColor: '#686868',
@@ -214,380 +240,477 @@ class PRODUCTION extends Component {
       activeStepIconColor: '#686868',
       completedStepIconColor: 'tomato',
       completedProgressBarColor: 'tomato',
-      completedCheckColor: '#FFF'
+      completedCheckColor: '#FFF',
     };
     const buttonstyle = {
       //393939
-        paddingStart: 10,
-        paddingEnd:10,
-      
-        borderWidth:1,
-        borderColor:appColors.lightBlue,
-        backgroundColor:'white',
-        borderRadius:5,
-        elevation:5
+      paddingStart: 10,
+      paddingEnd: 10,
 
+      borderWidth: 1,
+      borderColor: appColors.lightBlue,
+      backgroundColor: 'white',
+      borderRadius: 5,
+      elevation: 5,
     };
     const nextbtntextstyle = {
-        color: appColors.lightBlue, //393939
-     
-
+      color: appColors.lightBlue, //393939
     };
     const prevbtntextstyle = {
       color: appColors.grey3, //393939
-   
+    };
 
-  };
-
-    const submitbtnstyle={
-
+    const submitbtnstyle = {
       paddingStart: 10,
       paddingEnd: 10,
-      borderRadius:5,
-      borderWidth:1,
-      borderColor: 'tomato'
+      borderRadius: 5,
+      borderWidth: 1,
+      borderColor: 'tomato',
     };
-    
-  
- 
 
     return (
-        <>
-      <View style={{ flex: 1, marginTop: 5, padding:5, backgroundColor:'#f2f2f2' }}>
-        <ProgressSteps {...progressStepsStyle}>
-          <ProgressStep
-            label="Department"
-            onNext={this.onNextStep}
-            onPrevious={this.onPrevStep}
-            scrollViewProps={this.defaultScrollViewProps}
-        
-            nextBtnTextStyle={nextbtntextstyle}
-           
-            previousBtnTextStyle ={prevbtntextstyle}
+      <>
+        <View
+          style={{
+            flex: 1,
+            marginTop: 5,
+            padding: 5,
+            backgroundColor: '#f2f2f2',
+          }}
+        >
+          <ProgressSteps {...progressStepsStyle}>
+            <ProgressStep
+              label="Department"
+              onNext={this.onNextStep}
+              onPrevious={this.onPrevStep}
+              scrollViewProps={this.defaultScrollViewProps}
+              nextBtnTextStyle={nextbtntextstyle}
+              previousBtnTextStyle={prevbtntextstyle}
+              nextBtnStyle={buttonstyle}
+              // errors={this.state.errorflag}
+            >
+              <View style={styles.bodycontainer}>
+                <Text style={styles.sceneHeading}>Select Department</Text>
 
-            nextBtnStyle={buttonstyle}
-           // errors={this.state.errorflag}
+                <ScrollView>
+                  {this.state.radioBtnsData?.map((data, key) => {
+                    return (
+                      <View key={key}>
+                        {this.state.checked == key ? (
+                          <TouchableOpacity style={styles.btn}>
+                            <Image
+                              style={styles.img}
+                              source={require('~/assets/radio_selected.png')}
+                            />
+                            <Text>{data.DeptName}</Text>
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({
+                                checked: key,
+                                errorflag: 'false',
+                                depatcheckedid: data.Id,
+                              });
+                            }}
+                            style={styles.btn}
+                          >
+                            <Image
+                              style={styles.img}
+                              source={require('~/assets/radio_unselect.png')}
+                            />
+                            <Text>{data.DeptName}</Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            </ProgressStep>
+            <ProgressStep
+              label="Options"
+              onNext={this.onNextStep}
+              onPrevious={this.onPrevStep}
+              scrollViewProps={this.defaultScrollViewProps}
+              nextBtnTextStyle={nextbtntextstyle}
+              previousBtnTextStyle={prevbtntextstyle}
+              nextBtnStyle={buttonstyle}
+            >
+              <View style={styles.bodycontainer}>
+                <Text style={styles.sceneHeading}>Select option</Text>
 
-          >
-            <View style={styles.bodycontainer}>
-              <Text style={styles.sceneHeading}>Select Department</Text>
-
-              <ScrollView>
-
-                {this.state.radioBtnsData?.map((data, key) => {
-                return (
-                <View key={key}>
-                {this.state.checked == key ?
-                <TouchableOpacity style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_selected.png')}/>
-                <Text>{data.DeptName}</Text>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity onPress={()=>{this.setState({checked: key, errorflag:'false',depatcheckedid:data.Id })}} 
-                style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>
-                <Text>{data.DeptName}</Text>
-                </TouchableOpacity>
-                }
-                </View>
-                )
+                {this.state.lineData?.map((data, key) => {
+                  return (
+                    <View key={key}>
+                      {this.state.linechecked == key ? (
+                        <TouchableOpacity style={styles.btn}>
+                          <Image
+                            style={styles.img}
+                            source={require('~/assets/radio_selected.png')}
+                          />
+                          <Text>{data.DeptName}</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.setState({
+                              linechecked: key,
+                              errorflag: 'false',
+                              linecheckedid: data.id,
+                            });
+                          }}
+                          style={styles.btn}
+                        >
+                          <Image
+                            style={styles.img}
+                            source={require('~/assets/radio_unselect.png')}
+                          />
+                          <Text>{data.DeptName}</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  );
                 })}
-              </ScrollView>
+              </View>
+            </ProgressStep>
+            <ProgressStep
+              label="Style"
+              onNext={this.onNextStep}
+              onPrevious={this.onPrevStep}
+              scrollViewProps={this.defaultScrollViewProps}
+              nextBtnTextStyle={nextbtntextstyle}
+              nextBtnStyle={buttonstyle}
+              previousBtnTextStyle={prevbtntextstyle}
+            >
+              <View style={styles.bodycontainer}>
+                <Text style={styles.sceneHeading}>Choose style</Text>
 
-
-
-
-            </View>
-          </ProgressStep>
-          <ProgressStep
-            label="Options"
-            onNext={this.onNextStep}
-            onPrevious={this.onPrevStep}
-            scrollViewProps={this.defaultScrollViewProps}
-            nextBtnTextStyle={nextbtntextstyle}
-           
-            previousBtnTextStyle ={prevbtntextstyle}
-            nextBtnStyle={buttonstyle}
-          >
-            <View style={styles.bodycontainer}>
-            <Text style={styles.sceneHeading}>Select option</Text>
-
-            {this.state.lineData?.map((data, key) => {
-                return (
-                <View key={key}  >
-                {this.state.linechecked == key ?
-                <TouchableOpacity style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_selected.png')}/>
-                <Text>{data.DeptName}</Text>
-                </TouchableOpacity>
-                :
-                <TouchableOpacity onPress={()=>{this.setState({linechecked: key, errorflag:'false',linecheckedid:data.id })}} 
-                style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>
-                <Text>{data.DeptName}</Text>
-                </TouchableOpacity>
-                }
-                </View>
-                )
-                })}
-
-
-
-
-            </View>
-          </ProgressStep>
-          <ProgressStep
-            label="Style"
-            onNext={this.onNextStep}
-            onPrevious={this.onPrevStep}
-            scrollViewProps={this.defaultScrollViewProps}
-            nextBtnTextStyle={nextbtntextstyle}
-            nextBtnStyle={buttonstyle}
-            previousBtnTextStyle ={prevbtntextstyle}
-          >
-           <View style={styles.bodycontainer}>
-           <Text style={styles.sceneHeading}>Choose style</Text>
-
-              <View style={styles.jobnumberarea}>
-                    <Text style={{textAlign:'auto', fontSize:12, color:'tomato',}}>Input job number:</Text>
-                    <TextInput style={styles.inputtext}
-                    keyboardType='numeric'
+                <View style={styles.jobnumberarea}>
+                  <Text
+                    style={{ textAlign: 'auto', fontSize: 12, color: 'tomato' }}
+                  >
+                    Input job number:
+                  </Text>
+                  <TextInput
+                    style={styles.inputtext}
+                    keyboardType="numeric"
                     placeholder="Job number"
                     placeholderTextColor={appColors.grey5}
-                    onChangeText={(value) => this.setState({jobnumber: value,})}
+                    onChangeText={(value) =>
+                      this.setState({ jobnumber: value })
+                    }
                     value={this.state.jobnumber}
-
-                    />
-                    <Button
+                  />
+                  <Button
                     raised
                     title="Search"
                     type="outline"
                     icon={<Icon name="search" />}
-                    onPress={() => {
-
-
-                    }}
-                    />
-
-              </View>
-
-
-              <ScrollView>
-
-           {this.state.styleData?.map((data, key) => {
-                return (
-                <View key={key}   >
-                {this.state.stylechecked == key ?
-                <TouchableOpacity style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_selected.png')}/>
-                <Text style={{borderRightWidth:1, borderRightColor:'grey', padding:10,}}>Style : {data.name}</Text>
-                <View style={{flexDirection:'column', justifyContent:'space-around',padding:5, marginLeft:5,}}>
-                <Text style={styles.subtext}>Color: {data.color}</Text>
-                <Text style={styles.subtext}>Type: {data.type}</Text>
-                <Text style={styles.subtext}>Buyer: {data.buyer}</Text>
-                </View>
-
-                
-                </TouchableOpacity>
-                :
-                <TouchableOpacity onPress={()=>{this.setState({stylechecked: key, errorflag:'false' , stylecheckedid:data.styleid})}} 
-                style={styles.btn}>
-                <Image style={styles.img} source={require('~/assets/radio_unselect.png')}/>                
-                <Text  style={{borderRightWidth:1, borderRightColor:'grey', padding:10,}}>Style: {data.name}</Text>
-                <View style={{flexDirection:'column', justifyContent:'space-evenly',padding:5, marginLeft:5, }}>
-                <Text style={styles.subtext}>Color: {data.color}</Text>
-                <Text style={styles.subtext}>Type: {data.type}</Text>
-                <Text style={styles.subtext}>Buyer: {data.buyer}</Text>
-                </View>
-               
-                </TouchableOpacity>
-                }
-
-                </View>
-                )
-                })}
-
-        </ScrollView>
-
-
-
-
-            </View>
-          </ProgressStep>
-          <ProgressStep
-            label="Finish"
-            onPrevious={this.onPrevStep}
-            onSubmit={this.onSubmitSteps}
-            scrollViewProps={this.defaultScrollViewProps}
-            nextBtnTextStyle={nextbtntextstyle}
-            nextBtnStyle={buttonstyle}
-            previousBtnTextStyle ={prevbtntextstyle}
-          >
-           <View style={styles.bodycontainer}>
-           <Text style={styles.sceneHeading}>Input today's quantity </Text>
-
-           <View style={{flexDirection:'row', justifyContent:'space-around',padding:3, margin:5, borderBottomColor:appColors.grey4, borderBottomWidth:1,}}>
-              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}}>Size</Text>
-              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}} >Quantity</Text>
-              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}}>Production</Text>
-              <Text style={{fontSize:10, color:appColors.grey2, textAlign:'center'}}>Today</Text>
-          </View>
-
-           {this.state.sizeData?.map((data, key) => {
-                return (
-                <View key={key}  >
-                  <ScrollView>
-
-                   <View style={{flexDirection:'row', justifyContent:'space-around',padding:5, borderBottomColor:appColors.grey4, borderBottomWidth:1,}}>
-                <Text style={styles.subtext}> {data.SizeName}</Text>
-                <Text style={styles.subtext}> {data.Qty}</Text>
-                <Text style={styles.subtext}> {data.PrdQty}</Text>
-                  <TextInput style={styles.qntyinput}
-                  keyboardType='numeric'
-                  placeholder="Qnty"
-                  placeholderTextColor={appColors.grey5}
-                  onChangeText={(value) => this.setState({todayqnty: value,})}
-                  value={this.state.todayqnty}
-
+                    onPress={() => {}}
                   />
-                
                 </View>
+
+                <ScrollView>
+                  {this.state.styleData?.map((data, key) => {
+                    return (
+                      <View key={key}>
+                        {this.state.stylechecked == key ? (
+                          <TouchableOpacity style={styles.btn}>
+                            <Image
+                              style={styles.img}
+                              source={require('~/assets/radio_selected.png')}
+                            />
+                            <Text
+                              style={{
+                                borderRightWidth: 1,
+                                borderRightColor: 'grey',
+                                padding: 10,
+                              }}
+                            >
+                              Style : {data.name}
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                justifyContent: 'space-around',
+                                padding: 5,
+                                marginLeft: 5,
+                              }}
+                            >
+                              <Text style={styles.subtext}>
+                                Color: {data.color}
+                              </Text>
+                              <Text style={styles.subtext}>
+                                Type: {data.type}
+                              </Text>
+                              <Text style={styles.subtext}>
+                                Buyer: {data.buyer}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({
+                                stylechecked: key,
+                                errorflag: 'false',
+                                stylecheckedid: data.styleid,
+                              });
+                            }}
+                            style={styles.btn}
+                          >
+                            <Image
+                              style={styles.img}
+                              source={require('~/assets/radio_unselect.png')}
+                            />
+                            <Text
+                              style={{
+                                borderRightWidth: 1,
+                                borderRightColor: 'grey',
+                                padding: 10,
+                              }}
+                            >
+                              Style: {data.name}
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: 'column',
+                                justifyContent: 'space-evenly',
+                                padding: 5,
+                                marginLeft: 5,
+                              }}
+                            >
+                              <Text style={styles.subtext}>
+                                Color: {data.color}
+                              </Text>
+                              <Text style={styles.subtext}>
+                                Type: {data.type}
+                              </Text>
+                              <Text style={styles.subtext}>
+                                Buyer: {data.buyer}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    );
+                  })}
                 </ScrollView>
+              </View>
+            </ProgressStep>
+            <ProgressStep
+              label="Finish"
+              onPrevious={this.onPrevStep}
+              onSubmit={this.onSubmitSteps}
+              scrollViewProps={this.defaultScrollViewProps}
+              nextBtnTextStyle={nextbtntextstyle}
+              nextBtnStyle={buttonstyle}
+              previousBtnTextStyle={prevbtntextstyle}
+            >
+              <View style={styles.bodycontainer}>
+                <Text style={styles.sceneHeading}>Input today's quantity </Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    padding: 3,
+                    margin: 5,
+                    borderBottomColor: appColors.grey4,
+                    borderBottomWidth: 1,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: appColors.grey2,
+                      textAlign: 'center',
+                    }}
+                  >
+                    Size
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: appColors.grey2,
+                      textAlign: 'center',
+                    }}
+                  >
+                    Quantity
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: appColors.grey2,
+                      textAlign: 'center',
+                    }}
+                  >
+                    Production
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: appColors.grey2,
+                      textAlign: 'center',
+                    }}
+                  >
+                    Today
+                  </Text>
                 </View>
-                )
+
+                {this.state.sizeData?.map((data, key) => {
+                  return (
+                    <View key={key}>
+                      <ScrollView>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            padding: 5,
+                            borderBottomColor: appColors.grey4,
+                            borderBottomWidth: 1,
+                          }}
+                        >
+                          <Text style={styles.subtext}> {data.SizeName}</Text>
+                          <Text style={styles.subtext}> {data.Qty}</Text>
+                          <Text style={styles.subtext}> {data.PrdQty}</Text>
+                          <TextInput
+                            style={styles.qntyinput}
+                            keyboardType="numeric"
+                            placeholder="Qnty"
+                            placeholderTextColor={appColors.grey5}
+                            onChangeText={(value) =>
+                              this.setState({ todayqnty: value })
+                            }
+                            value={this.state.todayqnty}
+                          />
+                        </View>
+                      </ScrollView>
+                    </View>
+                  );
                 })}
-
-
-
-
-            </View>
-          </ProgressStep>
-
-         
-        </ProgressSteps>
-      </View>
+              </View>
+            </ProgressStep>
+          </ProgressSteps>
+        </View>
       </>
     );
   }
 }
 
 //const cardWidth = width / 2 - 150;
-const styles = StyleSheet.create({ 
-bodycontainer:{
-    flex:1, 
-      
-    justifyContent:'space-evenly',  
-    alignContent:'flex-start',
-    marginTop:5, 
-    marginBottom:5, 
-    backgroundColor:'#FFF', 
-    borderRadius:13,
-},
-inputtext:{
-  padding:3,
-  textAlign:'center',
-  color:appColors.grey1,
-  borderColor:appColors.grey3,
-  borderWidth:1,
-  minWidth:200,
-  borderRadius:9,
-},
-qntyinput:{
-  padding:3,
-  minWidth:'30%',
-  textAlign:'center',
-  color:appColors.grey1,
-  borderColor:appColors.grey3,
-  borderWidth:1,
-  borderRadius:9,
+const styles = StyleSheet.create({
+  bodycontainer: {
+    flex: 1,
 
-}
-,
-sceneHeading:{
-  textAlign:'center',
-  alignContent:'stretch',
-  fontSize:16,
-  fontWeight: 'bold',
-  color:appColors.grey2,
-},
+    justifyContent: 'space-evenly',
+    alignContent: 'flex-start',
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#FFF',
+    borderRadius: 13,
+  },
+  inputtext: {
+    padding: 3,
+    textAlign: 'center',
+    color: appColors.grey1,
+    borderColor: appColors.grey3,
+    borderWidth: 1,
+    minWidth: 200,
+    borderRadius: 9,
+  },
+  qntyinput: {
+    padding: 3,
+    minWidth: '30%',
+    textAlign: 'center',
+    color: appColors.grey1,
+    borderColor: appColors.grey3,
+    borderWidth: 1,
+    borderRadius: 9,
+  },
+  sceneHeading: {
+    textAlign: 'center',
+    alignContent: 'stretch',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: appColors.grey2,
+  },
 
-featurecontainer:{
-  flexWrap: 'wrap',
-  margin:5,
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems:'center',
-  
-  backgroundColor:'#f2f2f2',
-  minHeight:Dimensions.get('window').width*2.0,
-  alignContent:'center',
-  padding:10,
+  featurecontainer: {
+    flexWrap: 'wrap',
+    margin: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
 
-},
+    backgroundColor: '#f2f2f2',
+    minHeight: Dimensions.get('window').width * 2.0,
+    alignContent: 'center',
+    padding: 10,
+  },
 
-img:{
-  height:20,
-  width: 20,
-  padding:5,
-  marginRight:5,
-},
-btn:{
-  flexDirection: 'row',
-  alignItems:'center',
-  marginLeft:'18%',
-  marginBottom:8,
-  padding:10,
-  elevation:5,
-  width:Dimensions.get('window').width/2+50,
-  borderRadius:9,
-  backgroundColor:'#F2F2F2',
-  borderWidth:1,
-  borderColor:appColors.lightBlue,
-},
-subtext:{
-  fontSize:10,
-  color:appColors.primary,
-  fontWeight:'100',
-  textAlign:'left'
-},
+  img: {
+    height: 20,
+    width: 20,
+    padding: 5,
+    marginRight: 5,
+  },
+  btn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: '18%',
+    marginBottom: 8,
+    padding: 10,
+    elevation: 5,
+    width: Dimensions.get('window').width / 2 + 50,
+    borderRadius: 9,
+    backgroundColor: '#F2F2F2',
+    borderWidth: 1,
+    borderColor: appColors.lightBlue,
+  },
+  subtext: {
+    fontSize: 10,
+    color: appColors.primary,
+    fontWeight: '100',
+    textAlign: 'left',
+  },
 
-quntitycontainer:{
+  quntitycontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+    padding: 20,
+    elevation: 5,
+    // width:Dimensions.get('window').width/,
+    borderRadius: 9,
+    backgroundColor: '#F2F2F2',
+    borderWidth: 1,
+    borderColor: appColors.lightBlue,
+  },
+  qntyItem: {
+    width: '25%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderEndColor: appColors.grey3,
+    borderEndWidth: 1,
+    borderStartColor: appColors.grey3,
+    borderStartWidth: 1,
+  },
+  jobnumberarea: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
 
-  flexDirection: 'row',
-  alignItems:'center',
-margin:10,
-  padding:20,
-  elevation:5,
- // width:Dimensions.get('window').width/,
-  borderRadius:9,
-  backgroundColor:'#F2F2F2',
-  borderWidth:1,
-  borderColor:appColors.lightBlue,
-
-},
-qntyItem:{
-  width:'25%',
-  justifyContent:'center',
-  alignItems:'center',
-  borderEndColor:appColors.grey3,
-  borderEndWidth:1,
-  borderStartColor:appColors.grey3,
-  borderStartWidth:1,
-
-},
-jobnumberarea:{
- flexDirection:'row',
-  justifyContent:'space-evenly',
-  alignItems:'center',
- 
- paddingTop:10,
- paddingBottom:10,
-backgroundColor:'#f2f2f2',
-
-
-
-}
-
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: '#f2f2f2',
+  },
 });
 
-export default PRODUCTION;
+const mapStateToProps = (state: RootState) => ({
+  user: state.auth.user,
+  production: state.production,
+});
+
+export default connect(mapStateToProps)(PRODUCTION);
