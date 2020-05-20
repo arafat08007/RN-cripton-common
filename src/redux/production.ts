@@ -35,18 +35,31 @@ export interface GetOrderSizeWiseBreakdown {
 	SizeName: string;
 }
 
+export interface GetListLine {
+  Id : string;
+  Name : string;
+}
+
 
 interface ProductionState {
   proddept: GetListProductionDept[];
  // requisitions: { [key: string]: Requisition };
   
   inputoutput: GetListDeptInputOutput[];
+
+  productstyle: GetOrderBasicByJob[];
+  productsize : GetOrderSizeWiseBreakdown [];
+  productline : GetListLine [];
   loading: boolean;
 }
 
 const initialState: ProductionState = {
   proddept: [], 
   inputoutput: [],
+  productstyle : [],
+  productsize: [],
+  productline: [],
+
   loading: false,
 };
 
@@ -62,99 +75,22 @@ const authSlice = createSlice({
     gotinout(state, { payload }: PayloadAction<GetListDeptInputOutput[]>) {
       state.inputoutput = payload;
     },
+    gotstyle(state, { payload }: PayloadAction<GetOrderBasicByJob[]>) {
+      state.productstyle = payload;
+    },
+    gotsize(state, { payload }: PayloadAction<GetOrderSizeWiseBreakdown[]>) {
+      state.productsize = payload;
+    },
+    gotline(state, { payload }: PayloadAction<GetListLine[]>) {
+      state.productline = payload;
+    },
+
     setLoading(state, { payload }: PayloadAction<boolean>) {
       state.loading = payload;
     },
   },
 });
 
-
-// no need=============================================
-/*
-export const getApprovalSummary = (filters?: {
-  LocId?: string;
-  sDate?: string;
-  eDate?: string;
-  status?: string;
-  ReqNo?: string;
-}): AppThunk => async (dispatch, getState) => {
-  const user = getState().auth.user;
-  dispatch(gotSummary([]));
-  dispatch(setLoading(true));
-  try {
-    const { data } = await prodctionapi.get('/SspReqApprovalSummary', {
-      params: {
-        EmpId: user?.EmpId, //'6914c387-70e4-4a1d-93ea-ea73ed365d2f', //
-        SrcEmpId: user?.EmpId, // '6914c387-70e4-4a1d-93ea-ea73ed365d2f', //
-        LocId: filters?.LocId || user?.LocId,
-        Status: filters?.status || 'Pending',
-        ReqNum: filters?.ReqNo || '',
-        sDate: filters?.sDate || '',
-        eDate: filters?.eDate || '',
-      },
-    });
-    dispatch(gotSummary(data));
-  } catch (e) {
-    dispatch(setLoading(false));
-    // throw e;
-  }
-};
-
-
-
-export const getMyApprovalSummary = (filters?: {
-  LocId?: string;
-  sDate?: string;
-  eDate?: string;
-  status?: string;
-  ReqNo?: string;
-}): AppThunk => async (dispatch, getState) => {
-  const user = getState().auth.user;
-  dispatch(gotSummary([]));
-  dispatch(setLoading(true));
-  try {
-    const { data } = await api.get('/SspMyReqSummary', {
-      params: {
-        EmpId: user?.EmpId, //'6914c387-70e4-4a1d-93ea-ea73ed365d2f', //
-        SrcEmpId: user?.EmpId, // '6914c387-70e4-4a1d-93ea-ea73ed365d2f', //
-        LocId: filters?.LocId || user?.LocId,
-        Status: filters?.status || 'Pending',
-        ReqNum: filters?.ReqNo || '',
-        sDate: filters?.sDate || '',
-        eDate: filters?.eDate || '',
-      },
-    });
-    dispatch(gotSummary(data));
-  } catch (e) {
-    dispatch(setLoading(false));
-    // throw e;
-  }
-};
-
-export const getRequisition = (BaseInfo: string): AppThunk => async (
-  dispatch,
-  getState,
-) => {
-  const user = getState().auth.user;
-  try {
-    const { data } = await api.get('/SspViewReq', {
-      params: {
-        EmpId: user?.EmpId,
-        BaseInfo,
-      },
-    });
-    data.BaseInfo = BaseInfo;
-    data.approverDetails = data.ReqApproverDetl.split('_==_') as string[];
-    data.ReqItemDetl &&
-      (data.itemDetails = data.ReqItemDetl.split('_==_') as string[]);
-    data.ReqDetails &&
-      (data.details = data.ReqDetails.split('_==_') as string[]);
-    dispatch(gotRequisition(data));
-  } catch (e) {
-    throw e;
-  }
-};
-*/
 
 export const getDepartment = (): AppThunk => async (dispatch) => {
   try {
@@ -164,22 +100,94 @@ export const getDepartment = (): AppThunk => async (dispatch) => {
     throw e;
   }
 };
-export const getInOut = (): AppThunk => async (dispatch) => {
+
+export const getLine = (): AppThunk => async (dispatch) => {
   try {
-    const { data } = await prodctionapi.get('/GetListDeptInputOutput');
-    dispatch(gotinout(data));
+    const { data } = await prodctionapi.get('/GetListLine');
+    dispatch(gotline(data));
   } catch (e) {
     throw e;
   }
 };
 
+export const getStyle = (filters?: {
+  JobNo?: string;
+  
+}): AppThunk => async (dispatch) => {
+  //const user = getState().auth.user;
+  dispatch(gotstyle([]));
+  dispatch(setLoading(true));
+  try {
+    const { data } = await prodctionapi.get('/GetOrderBasicByJob', {
+      params: {
+       
+        JobNo: filters?.JobNo || '3000',
+      },
+    });
+    dispatch(gotinout(data));
+   // console.warn(DeptName);
+  } catch (e) {
+    dispatch(setLoading(false));
+    // throw e;
+  }
+};
 
+
+
+export const getOption = (filters?: {
+  DeptName?: string;
+  
+}): AppThunk => async (dispatch) => {
+  //const user = getState().auth.user;
+  dispatch(gotinout([]));
+  dispatch(setLoading(true));
+  try {
+    const { data } = await prodctionapi.get('/GetListDeptInputOutput', {
+      params: {
+       
+        DeptName: filters?.DeptName || 'Cutting',
+      },
+    });
+    dispatch(gotinout(data));
+   // console.warn(DeptName);
+  } catch (e) {
+    dispatch(setLoading(false));
+    // throw e;
+  }
+};
+
+export const getSize = (filters?: {
+  DeptId?: string;
+  StyleId?: string;
+  
+}): AppThunk => async (dispatch) => {
+  //const user = getState().auth.user;
+  dispatch(gotsize([]));
+  dispatch(setLoading(true));
+  try {
+    const { data } = await prodctionapi.get('/GetOrderSizeWiseBreakdown', {
+      params: {
+       
+        DeptId: filters?.DeptId || 'CuttingInput',
+        StyleId: filters?.StyleId || '25320290-bd42-4d3a-9bb8-03f30637737c',
+      },
+    });
+    dispatch(gotinout(data));
+   // console.warn(DeptName);
+  } catch (e) {
+    dispatch(setLoading(false));
+    // throw e;
+  }
+};
 
 
 export const {
 
   gotDepartment,
   gotinout,
+  gotstyle,
+  gotsize,
+  gotline,
 
   setLoading,
 } = authSlice.actions;

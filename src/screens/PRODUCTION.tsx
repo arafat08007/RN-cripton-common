@@ -7,11 +7,13 @@ import {
   CheckBox,
   ScrollView,
   TouchableOpacity,
+  TouchableHighlight ,
   Image,
   Dimensions,
   TextInput,
 } from 'react-native';
 import { Icon, Button, Input } from 'react-native-elements';
+import { Dropdown } from 'react-native-material-dropdown';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { appColors } from '~/theme';
 
@@ -19,25 +21,28 @@ import { appColors } from '~/theme';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { RootState } from '~/redux/store';
 
-import { getDepartment, getInOut } from '~/redux/production';
+import { getDepartment, getOption } from '~/redux/production';
 import { State } from 'react-native-gesture-handler';
 
 class PRODUCTION extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      isValid: false,
+      errors: false,
+
       backgroundColorstyle: '#F2F2F2',
 
       //radioBtnsData: ['Cutting', 'Prinitng', 'Embrodery','Sweing','Ironing','Finising'],
 
-      radioBtnsData: [
+      /*radioBtnsData: [
         { DeptName: 'Cutting', Id: 'cutting' },
         { DeptName: 'Prinitng', Id: 'printing' },
         { DeptName: 'Embrodery', Id: 'emb' },
         { DeptName: 'Sweing', Id: 'sew' },
         { DeptName: 'Ironing', Id: 'iron' },
         { DeptName: 'Finising', Id: 'finishing' },
-      ],
+      ],*/
       checked: 0,
       depatcheckedid: '',
       errorflag: {},
@@ -174,7 +179,29 @@ class PRODUCTION extends Component<any, any> {
   onNextStep = () => {
     console.log('called next step');
     // console.log(""+{errorflag});
+    if (!this.state.isValid) {
+      this.setState({ errors: true });
+    } else {
+      this.setState({ errors: false });
+      console.info (this.state.depatcheckedid)
+    }
   };
+
+  onDeptSelect = () => {
+    console.log('called next step');
+    // console.log(""+{errorflag});
+    if (!this.state.isValid) {
+      this.setState({ errors: true });
+    } else {
+      this.setState({ errors: false });
+     
+      var selectedept =this.state.depatcheckedid;
+      this.props.dispatch(getOption(selectedept.toString()));
+      console.info (selectedept);
+      console.log(this.props.production.inputoutput);
+    }
+  };
+  
 
   onPaymentStepComplete = () => {
     alert('Payment step completed!');
@@ -211,33 +238,21 @@ class PRODUCTION extends Component<any, any> {
     return user;
   };
 
-  departments = () => {
-    const departments = useSelector(
-      (state: RootState) => state.production.proddept
-    );
-    return <Text>departments </Text>;
-  };
-  deptinout = () => {
-    const deptinout = useSelector(
-      (state: RootState) => state.production.inputoutput
-    );
-    return deptinout;
-  };
-
-  loading = () => {
-    const loading = useSelector((state: RootState) => state.production.loading);
-    return loading;
-  };
-
+  
   componentDidMount() {
     this.props.dispatch(getDepartment());
-    this.props.dispatch(getInOut());
+   // this.props.dispatch(getInOut());
+    //this.props.dispatch()
   }
 
   render() {
     console.log(this.props.user);
     console.log(this.props.production);
     console.log(this.props.dispatch);
+
+    console.log(this.props.production.proddept);
+
+ 
     const progressStepsStyle = {
       activeStepIconBorderColor: 'tomato',
       activeLabelColor: '#686868',
@@ -277,28 +292,60 @@ class PRODUCTION extends Component<any, any> {
       <>
         <View
           style={{
-            flex: 1,
-            marginTop: 5,
-            padding: 5,
+            flex: 1,         
             backgroundColor: '#f2f2f2',
+            justifyContent:'center',
+            alignSelf:'stretch',
+            alignItems:'center'
           }}
         >
           <ProgressSteps {...progressStepsStyle}>
             <ProgressStep
               label="Department"
-              onNext={this.onNextStep}
+              onNext={this.onDeptSelect}
               onPrevious={this.onPrevStep}
               scrollViewProps={this.defaultScrollViewProps}
               nextBtnTextStyle={nextbtntextstyle}
               previousBtnTextStyle={prevbtntextstyle}
               nextBtnStyle={buttonstyle}
+              errors={this.state.errors}
               // errors={this.state.errorflag}
             >
               <View style={styles.bodycontainer}>
                 <Text style={styles.sceneHeading}>Select Department</Text>
 
+
+                      {this.props.production.proddept.length === 0 &&  (
+                      <View
+                      style={{                     
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      backgroundColor:appColors.grey5,
+                      borderRadius:9,
+                      padding:10,
+                      elevation:5,
+                      }}>
+
+
+
+                      <Icon
+                      name="warning"
+                      color={'red'}
+                      size={30}
+                      raised={true}
+
+                      />
+
+                      <Text style={{padding:'10%', marginTop:50, textAlign:'center', justifyContent:'center', fontSize:20, color:'black'}}>
+                      Loading ....</Text>
+                      <Text style={{justifyContent:'center', textAlign:'center', fontSize:10, color:'black'}}> Please check INTERNET connectoin!</Text>
+                      </View>
+                      )}
+
+
+
                 <ScrollView>
-                  {this.state.radioBtnsData?.map((data, key) => {
+                  {this.props.production.proddept?.map((data, key) => {
                     return (
                       <View key={key}>
                         {this.state.checked == key ? (
@@ -314,7 +361,7 @@ class PRODUCTION extends Component<any, any> {
                             onPress={() => {
                               this.setState({
                                 checked: key,
-                                errorflag: 'false',
+                                isValid:true,
                                 depatcheckedid: data.Id,
                               });
                             }}
@@ -345,7 +392,36 @@ class PRODUCTION extends Component<any, any> {
               <View style={styles.bodycontainer}>
                 <Text style={styles.sceneHeading}>Select option</Text>
 
-                {this.state.lineData?.map((data, key) => {
+                {this.props.production.inputoutput.length === 0 &&  (
+                      <View
+                      style={{                     
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                      padding:10,
+                     
+                      backgroundColor:appColors.grey5,
+                      borderRadius:9,
+                      elevation:5,
+                      }}>
+
+
+
+                      <Icon
+                      name="warning"
+                      color={'red'}
+                      size={30}
+                      raised={true}
+
+                      />
+
+                      <Text style={{padding:'10%', marginTop:50, textAlign:'center', justifyContent:'center', fontSize:20, color:'black'}}>
+                      Loading ....</Text>
+                      <Text style={{justifyContent:'center', textAlign:'center', fontSize:10, color:'black'}}> Please check INTERNET connectoin!</Text>
+                      </View>
+                      )}
+
+
+                {this.props.production.inputoutput?.map((data, key) => {
                   return (
                     <View key={key}>
                       {this.state.linechecked == key ? (
@@ -391,31 +467,26 @@ class PRODUCTION extends Component<any, any> {
               <View style={styles.bodycontainer}>
                 <Text style={styles.sceneHeading}>Choose style</Text>
 
-                <View style={styles.jobnumberarea}>
-                  <Text
-                    style={{ textAlign: 'auto', fontSize: 12, color: 'tomato' }}
-                  >
-                    Input job number:
-                  </Text>
-                  <TextInput
-                    style={styles.inputtext}
-                    keyboardType="numeric"
-                    placeholder="Job number"
-                    placeholderTextColor={appColors.grey5}
-                    onChangeText={(value) =>
-                      this.setState({ jobnumber: value })
-                    }
-                    value={this.state.jobnumber}
-                  />
-                  <Button
-                    raised
-                    title="Search"
-                    type="outline"
-                    icon={<Icon name="search" />}
-                    onPress={() => {}}
-                  />
-                </View>
-
+                  <View style={styles.jobnumberarea}>
+                  <View >
+                      <TextInput
+                      style={{alignItems:'center',justifyContent:'center',backgroundColor:'white', borderBottomColor:appColors.grey4, borderBottomWidth:1,}}
+                      value = {this.state.searchString}
+                      onChangeText = {(searchString) => {this.setState({searchString})}}
+                      placeholder = '# search job number'
+                      keyboardType = 'numeric'
+                      // onSubmitEditing = {()=>{this._fetchResults()}}
+                      ref = 'searchBar'
+                      />
+                  </View>
+                  <TouchableHighlight style={{alignItems:'center',justifyContent:'center'}} 
+                  //onPress = {()=>{this._fetchResults()}} 
+                  underlayColor = 'transparent'>
+                  <View>
+                  <Icon name="search" size = {20} color = "#4285F4" />
+                  </View>
+                  </TouchableHighlight>
+                  </View>
                 <ScrollView>
                   {this.state.styleData?.map((data, key) => {
                     return (
@@ -515,6 +586,24 @@ class PRODUCTION extends Component<any, any> {
             >
               <View style={styles.bodycontainer}>
                 <Text style={styles.sceneHeading}>Input today's quantity </Text>
+                <View style={styles.jobnumberarea}>
+                         
+                    <Dropdown
+
+                    containerStyle ={{width:'100%',marginBottom:5,}}
+                    label='Line number:'
+                //    data={locations.map((l) => ({label:l.LocName, value:l.LocId}))}
+
+                  //  selectedItemColor={'blue'}
+
+                  //  onChangeText={(v:any)=>{setLocId(v);}}
+
+                    // set value from state if its set
+                    // or use default as first value from the data
+                   // value={LocId}
+                    >
+                    </Dropdown>
+                  </View>
 
                 <View
                   style={{
@@ -563,11 +652,11 @@ class PRODUCTION extends Component<any, any> {
                     Today
                   </Text>
                 </View>
-
+          <ScrollView>
                 {this.state.sizeData?.map((data, key) => {
                   return (
                     <View key={key}>
-                      <ScrollView>
+                    
                         <View
                           style={{
                             flexDirection: 'row',
@@ -591,10 +680,11 @@ class PRODUCTION extends Component<any, any> {
                             value={this.state.todayqnty}
                           />
                         </View>
-                      </ScrollView>
+                    
                     </View>
                   );
                 })}
+                  </ScrollView>
               </View>
             </ProgressStep>
           </ProgressSteps>
@@ -608,11 +698,13 @@ class PRODUCTION extends Component<any, any> {
 const styles = StyleSheet.create({
   bodycontainer: {
     flex: 1,
+    alignSelf:'stretch',
 
-    justifyContent: 'space-evenly',
-    alignContent: 'flex-start',
+    justifyContent: 'center',
+    alignContent: 'center',
     marginTop: 5,
     marginBottom: 5,
+    padding:10,
     backgroundColor: '#FFF',
     borderRadius: 13,
   },
@@ -622,7 +714,7 @@ const styles = StyleSheet.create({
     color: appColors.grey1,
     borderColor: appColors.grey3,
     borderWidth: 1,
-    minWidth: 200,
+    minWidth: 100,
     borderRadius: 9,
   },
   qntyinput: {
@@ -637,8 +729,10 @@ const styles = StyleSheet.create({
   sceneHeading: {
     textAlign: 'center',
     alignContent: 'stretch',
-    fontSize: 16,
+    fontSize: 14,
+   padding:10,
     fontWeight: 'bold',
+
     color: appColors.grey2,
   },
 
@@ -704,12 +798,12 @@ const styles = StyleSheet.create({
   },
   jobnumberarea: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
+    alignSelf:'stretch',
     alignItems: 'center',
-
-    paddingTop: 10,
-    paddingBottom: 10,
-    backgroundColor: '#f2f2f2',
+   
+    padding: 5,
+    //backgroundColor: '#f2f2f2',
   },
 });
 
